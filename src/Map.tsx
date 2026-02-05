@@ -1,8 +1,11 @@
 import React, {useState, useEffect, useRef} from "react"
 import { useMapCamera } from "./useMapCamera";
+import { useEditorStore } from "./useEditorStore";
+
 export function Map() {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const { camera, handlers } = useMapCamera();
+  const getTool = useEditorStore.getState;
 
   useEffect(() => {
     const canvas = canvasRef.current!;
@@ -27,6 +30,8 @@ export function Map() {
     }
 
     function render() {
+      const tool = getTool().activeTool;
+      
       ctx.setTransform(1, 0, 0, 1, 0, 0);
       ctx.clearRect(0, 0, canvas.width, canvas.height);
 

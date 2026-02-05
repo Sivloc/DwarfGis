@@ -1,13 +1,20 @@
-
+import { useEditorStore } from "./useEditorStore";
 
 const Sidebar = () => {
 
+    const activeTool = useEditorStore((state) => state.activeTool);
+    const setActiveTool = useEditorStore((state) => state.setActiveTool);
+
     return (
-        <div className="sidebar">
-            <h1>DwarfGIS</h1>
-            <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam scelerisque leo nec libero tincidunt, a tincidunt libero tincidunt.</p>
+        <div style={{ width: 240, background: "#222", color: "#eee" }}>
+            <button onClick={() => setActiveTool("pan")}>
+                Pan {activeTool === "pan" && "✓"}
+            </button>
+            <button onClick={() => setActiveTool("paint")}>
+                Paint {activeTool === "paint" && "✓"}
+            </button>
         </div>
-    )
+  );
 }
 
 export default Sidebar;

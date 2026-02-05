@@ -7,7 +7,9 @@ function App() {
   return (
     <>
       <div className='map-container'>
-        <Sidebar />
+        <div className='sidebar'>
+          <Sidebar />
+        </div>
         <Map />
       </div>
     </>
