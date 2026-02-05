@@ -1,11 +1,15 @@
 import './App.css'
 import Map from './Map'
+import Sidebar from './Sidebar'
 
 function App() {
 
   return (
     <>
-      <Map ></Map>
+      <div className='map-container'>
+        <Sidebar />
+        <Map />
+      </div>
     </>
   )
 }

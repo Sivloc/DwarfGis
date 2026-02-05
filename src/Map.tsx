@@ -9,12 +9,22 @@ export function Map() {
     const ctx = canvas.getContext("2d")!;
 
     function resize() {
-      canvas.width = window.innerWidth;
-      canvas.height = window.innerHeight;
+      const { width, height } = canvas.getBoundingClientRect();
+      canvas.width = Math.max(1, Math.floor(width));
+      canvas.height = Math.max(1, Math.floor(height));
     }
 
     resize();
-    window.addEventListener("resize", resize);
+    const resizeObserver =
+      typeof ResizeObserver !== "undefined"
+        ? new ResizeObserver(resize)
+        : null;
+
+    if (resizeObserver) {
+      resizeObserver.observe(canvas);
+    } else {
+      window.addEventListener("resize", resize);
+    }
 
     function render() {
       ctx.setTransform(1, 0, 0, 1, 0, 0);
@@ -31,7 +41,13 @@ export function Map() {
 
     render();
 
-    return () => window.removeEventListener("resize", resize);
+    return () => {
+      if (resizeObserver) {
+        resizeObserver.disconnect();
+      } else {
+        window.removeEventListener("resize", resize);
+      }
+    };
   }, []);
 
   return (
@@ -50,6 +66,7 @@ function drawDebugGrid(ctx: CanvasRenderingContext2D) {
   ctx.strokeStyle = "#333";
   ctx.lineWidth = 1;
 
+  // draw vertical and horizontal lines
   for (let i = -count; i <= count; i++) {
     ctx.beginPath();
     ctx.moveTo(i * size, -count * size);
@@ -62,6 +79,7 @@ function drawDebugGrid(ctx: CanvasRenderingContext2D) {
     ctx.stroke();
   }
 
+  // red point in the center
   ctx.fillStyle = "red";
   ctx.beginPath();
   ctx.arc(0, 0, 5, 0, Math.PI * 2);
